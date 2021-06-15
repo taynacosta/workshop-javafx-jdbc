@@ -68,6 +68,7 @@ public class DepartmentFormController implements Initializable {
 		try {
 		entity = getFormData();
 		service.saverOrUpdate(entity);
+		notifyDataChangedListeners();
 		Utils.currentStage(event).close();
 		}
 		catch(DbException e) {
@@ -76,6 +77,11 @@ public class DepartmentFormController implements Initializable {
 		}
 	}
 
+	private void notifyDataChangedListeners() {
+		for (DataChangeListener listener : dataChangeListener) {
+		listener.onDataChanged();
+	}
+	}
 	private Department getFormData() {
 		Department obj = new Department();
 		obj.setId(Utils.tryParseToInt(txtId.getText()));
